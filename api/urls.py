@@ -3,6 +3,7 @@ from api.views import *
 
 urlpatterns = [
     path('animes/', AnimeCreateView.as_view()),  # get all animes
+    path('animes/top', TopAnimeListView.as_view()),  # get all animes
     path('anime/detail/<int:pk>/', AnimeDetailView.as_view()),  # get detail info about anime
     path('genres/', GenreCreateView.as_view()),  # get all genres
     path('genre/detail/<int:pk>/', GenreDetailView.as_view()),  # get detail info about genre

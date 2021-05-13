@@ -1,5 +1,4 @@
 from datetime import datetime
-import json
 
 from django.db.models import Avg
 from django.http import JsonResponse
@@ -9,13 +8,10 @@ from rest_framework import authentication, permissions
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 
-# Create your views here.
-
-
 class AnimeCreateView(generics.ListCreateAPIView):
     search_fields = ['title']
     filter_backends = (SearchFilter, OrderingFilter)
-    serializer_class = AnimeSerializer
+    serializer_class = AnimeListSerializer
 
     def get_queryset(self):
         queryset = Anime.objects.all()
@@ -24,20 +20,11 @@ class AnimeCreateView(generics.ListCreateAPIView):
         if genre:
             queryset = queryset.filter(genres__genre_name__contains=genre)
         return queryset
-        # animes = Anime.objects.all()
-        # for anime in animes:
-        #     count = Rating.objects.count(anime=anime.id)
-        #     ratings = Rating.objects.get(anime=anime.id)
-        #
-        # anime_id = self.kwargs['anime_id']
-        # if anime_id is not None:
-        #     queryset = queryset.filter(anime_id=anime_id)
-        # return queryset
 
 
-# class AnimeListView(generics.ListAPIView):
-#     serializer_class = AnimeSerializer
-#     queryset = Anime.objects.all()
+class TopAnimeListView(generics.ListAPIView):
+    serializer_class = AnimeListSerializer
+    queryset = Anime.objects.annotate(avg_rate=Avg('rating__stars')).order_by('avg_rate')[:10]
 
 
 class AnimeDetailView(generics.RetrieveUpdateDestroyAPIView):

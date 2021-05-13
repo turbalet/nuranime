@@ -36,8 +36,10 @@ class Anime(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField()
     release_date = models.DateField()
+    season = models.CharField(max_length=64)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
     studio = models.ForeignKey(Studio, on_delete=models.CASCADE)
+    poster = models.ImageField(upload_to='posters/', default='NULL')
     genres = models.ManyToManyField(Genre, related_name='animes', blank=True)
 
     def __str__(self):
@@ -82,7 +84,7 @@ class SubComment(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
-    stars = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    stars = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
 
     def set_stars(self, stars):
         self.stars = stars

@@ -27,9 +27,16 @@ class StatusSerializer(serializers.ModelSerializer):
 class AnimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anime
-        fields = ['title', 'description', 'release_date', 'status', 'studio', 'genres', 'avg_rating', 'count_rate']
+        fields = ['id', 'title', 'description', 'release_date', 'status', 'studio', 'genres', 'avg_rating', 'count_rate']
         extra_kwargs = {'genres': {'required': False}}
         depth = 1
+
+
+class AnimeListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Anime
+        fields = ('id', 'title', 'release_date', 'avg_rating', 'count_rate',)
+        extra_kwargs = {'genres': {'required': False}}
 
 
 class GenreSerializer(serializers.ModelSerializer):
