@@ -1,12 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
-
-class User(AbstractUser):
-    profile_img = models.TextField()
-
-    def __str__(self):
-        return self.username
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models.functions import Coalesce
 
 
 class Studio(models.Model):
@@ -47,3 +42,47 @@ class Anime(models.Model):
 
     def __str__(self):
         return self.title
+
+    def avg_rating(self):
+        return Rating.objects.filter(anime=self).aggregate(
+            avg=Coalesce(models.Avg('stars'), 0),
+        )
+
+    def count_rate(self):
+        return Rating.objects.filter(anime=self).count()
+
+
+class User(AbstractUser):
+    user_img = models.ImageField(upload_to='users_img/', default='NULL')
+
+    def __str__(self):
+        return self.username
+
+
+class UserAnimeViewStatus(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    view_status = models.ForeignKey(ViewStatus, on_delete=models.CASCADE)
+
+
+class Comment(models.Model):
+    message = models.TextField()
+    commented_date = models.DateTimeField()
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class SubComment(models.Model):
+    message = models.TextField()
+    commented_date = models.DateTimeField()
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    stars = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)])
+
+    def set_stars(self, stars):
+        self.stars = stars

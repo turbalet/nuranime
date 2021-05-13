@@ -26,10 +26,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-APPEND_SLASH = False
 
 AUTH_USER_MODEL = "api.User"
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,8 +64,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (),
 
 }
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -146,3 +144,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = BASE_DIR / "api/media"
+MEDIA_URL = '/media/'
