@@ -33,6 +33,13 @@ class AnimeSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class AnimeListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Anime
+        fields = ('id', 'title', 'release_date', 'poster', 'avg_rating', 'count_rate',)
+        extra_kwargs = {'genres': {'required': False}}
+
+
 class GenreSerializer(serializers.ModelSerializer):
     animes = AnimeSerializer(many=True, read_only=True)
 
