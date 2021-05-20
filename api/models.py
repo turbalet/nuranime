@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+#from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.functions import Coalesce
+from django.conf import settings
 
 
 class Studio(models.Model):
@@ -54,15 +55,15 @@ class Anime(models.Model):
         return Rating.objects.filter(anime=self).count()
 
 
-class User(AbstractUser):
-    user_img = models.ImageField(upload_to='users_img/', default='NULL')
-
-    def __str__(self):
-        return self.username
+# class User(AbstractUser):
+#     user_img = models.ImageField(upload_to='users_img/', default='NULL')
+#
+#     def __str__(self):
+#         return self.username
 
 
 class UserAnimeViewStatus(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
     view_status = models.ForeignKey(ViewStatus, on_delete=models.CASCADE)
 
@@ -71,20 +72,20 @@ class Comment(models.Model):
     message = models.TextField()
     commented_date = models.DateTimeField()
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class SubComment(models.Model):
     message = models.TextField()
     commented_date = models.DateTimeField()
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Rating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
-    stars = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    stars = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)])
 
     def set_stars(self, stars):
         self.stars = stars

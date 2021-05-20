@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-
+from users.models import User
 from api.models import *
 
 
@@ -27,16 +27,10 @@ class StatusSerializer(serializers.ModelSerializer):
 class AnimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anime
-        fields = ['id', 'title', 'description', 'release_date', 'status', 'studio', 'genres', 'avg_rating', 'count_rate']
+        fields = ['id', 'title', 'description', 'release_date', 'status', 'studio', 'poster', 'genres', 'avg_rating',
+                  'count_rate']
         extra_kwargs = {'genres': {'required': False}}
         depth = 1
-
-
-class AnimeListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Anime
-        fields = ('id', 'title', 'release_date', 'avg_rating', 'count_rate',)
-        extra_kwargs = {'genres': {'required': False}}
 
 
 class GenreSerializer(serializers.ModelSerializer):

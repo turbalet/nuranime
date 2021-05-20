@@ -1,9 +1,8 @@
-from datetime import datetime
-
 from django.db.models import Avg
 from django.http import JsonResponse
 from rest_framework import generics
 from api.serializers import *
+from django.utils import timezone
 from rest_framework import authentication, permissions
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -24,7 +23,7 @@ class AnimeCreateView(generics.ListCreateAPIView):
 
 class TopAnimeListView(generics.ListAPIView):
     serializer_class = AnimeListSerializer
-    queryset = Anime.objects.annotate(avg_rate=Avg('rating__stars')).order_by('avg_rate')[:10]
+    queryset = Anime.objects.annotate(avg_rate=Avg('rating__stars')).order_by('-avg_rate')[:20]
 
 
 class AnimeDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -60,7 +59,6 @@ class RatingDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class RatingCreateView(generics.CreateAPIView):
     serializer_class = RatingSerializer
-    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -91,7 +89,6 @@ class UserAnimeViewStatusCreateView(generics.CreateAPIView):
 
 class UserAnimeViewStatusListView(generics.ListAPIView):
     serializer_class = UserAnimeViewStatusSerializer
-    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -121,18 +118,27 @@ class CommentListView(generics.ListAPIView):
 
 class CommentCreateView(generics.CreateAPIView):
     serializer_class = CommentSerializer
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, ]
 
+    # django timezone
     def post(self, request, *args, **kwargs):
         if (message := request.data.get("message")) and (
                 user := self.request.user
-        ) and (anime := request.data.get("anime_id")):
-            request.data['anime'] = anime
-            request.data['commented_date'] = datetime.now()
-            request.data['user'] = user.id
-            request.data['message'] = message
-        return self.create(request, *args, **kwargs)
+        ) and (anime_id := request.data.get("anime_id")):
+            comment = Comment()
+            comment.user = user
+            comment.commented_date = timezone.now()
+            anime = Anime.objects.get(pk=anime_id)
+            comment.anime = anime
+            comment.message = message
+            comment.save()
+
+            # request.data['commented_date'] = timezone.now()
+            # request.data['user'] = user.id
+            # request.data['anime'] = anime
+            # request.data['message'] = message
+        # return self.create(request, *args, **kwargs)
+        return JsonResponse("Comment was successfully added", safe=False)
 
 
 class SubCommentListView(generics.ListAPIView):
@@ -148,7 +154,6 @@ class SubCommentListView(generics.ListAPIView):
 
 class SubCommentCreateView(generics.CreateAPIView):
     serializer_class = SubCommentSerializer
-    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -157,7 +162,7 @@ class SubCommentCreateView(generics.CreateAPIView):
         ) and (
                 comment := request.data.get("comment_id")
         ):
-            request.data['commented_date'] = datetime.now()
+            request.data['commented_date'] = timezone.now()
             request.data['user'] = user.id
             request.data['message'] = message
             request.data['comment'] = comment
