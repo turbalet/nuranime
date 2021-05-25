@@ -77,7 +77,7 @@ class RatingCreateView(generics.CreateAPIView):
                 return self.create(request, *args, **kwargs)
 
 
-class UserView(generics.GenericAPIView):
+class UserView(generics.ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 

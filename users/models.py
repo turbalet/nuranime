@@ -32,8 +32,9 @@ class CustomAccountManager(BaseUserManager):
         user = self.model(email=email, username=username,
                           **other_fields)
         user.set_password(password)
-        user.save()
-        return user
+        # user.save()
+        # return user
+        self.create_user(email, username, password, **other_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -42,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     start_date = models.DateTimeField(default=timezone.now)
     user_img = models.ImageField(upload_to='users_img/', default='NULL')
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects = CustomAccountManager()
 

@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
+AUTH_USER_MODEL = "users.User"
 
 
 INSTALLED_APPS = [
@@ -133,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
-AUTH_USER_MODEL = "users.User"
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
@@ -143,7 +144,7 @@ SIMPLE_JWT = {
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('JWT', 'Bearer'),
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
