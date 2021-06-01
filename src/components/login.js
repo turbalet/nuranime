@@ -45,8 +45,13 @@ export default function SignIn() {
 
 
 	return (
-		<div>
-			<Header></Header>
+		<div className="all">
+			<Header />
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
+
 		<section>
 			
 			<div className="color" />

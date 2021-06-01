@@ -6,7 +6,8 @@ import Register from './components/register';
 import SignIn from './components/login';
 import Logout from './components/logout';
 import anime from './components/anime';
-
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import profile from './components/profile';
 
 const routing = (
 	<Router>
@@ -17,6 +18,7 @@ const routing = (
 				<Route path="/login" component={SignIn} />
 				<Route path="/logout" component={Logout} />
 				<Route path="/anime" component={anime} />
+				<Route path="/profile" component={profile} />
 			</Switch>
 		</React.StrictMode>
 	</Router>

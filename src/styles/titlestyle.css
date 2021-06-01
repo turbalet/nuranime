@@ -11,7 +11,7 @@
   flex-direction: row;
   margin-top: 110px;
   background: yellow;
-  height: 920px;
+  height: 100%;
   /*background: rgba(146, 0, 250, 0.2);*/
   background: rgba(255,255,255,0.1);
   border: none;
@@ -29,7 +29,7 @@
   flex-direction: column;
   align-items: center;
   width: 400px;
-  height: 800px;
+  height: 100%;
 
 }
 .contleft .shortinfo{
@@ -370,4 +370,9 @@ details.comment:not([open]) .comment-heading::after {
 }
 .d-none {
     display: none;
+}
+
+.genre:hover {
+  text-decoration: underline;
+  color: black;
 }

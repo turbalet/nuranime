@@ -5,11 +5,19 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-body{
-  overflow: hidden;
+.all{
+  background-color: #7F7DD4;
 
 }
+body{
+  overflow: hidden;
+  
+}
+
 section{
+  width: 500px;
+  margin-left: 35%;
+  margin-top: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,7 +55,7 @@ section .color:nth-child(3){
 .container{
   position: relative;
   width: 400px;
-  min-height: 400px;
+  height: 400px;
   background: rgba(255,255,255,0.1);
   border-radius: 10px;
   display: flex;

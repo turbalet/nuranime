@@ -40,8 +40,12 @@ export default function SignUp() {
 
 
 	return (
-		<div>
+		<div className="all">
 			<Header></Header>
+			<br></br>
+			<br></br>
+			<br></br>
+			<br></br>
 			<section>
 				<div className="color" />
 				<div className="color" />
