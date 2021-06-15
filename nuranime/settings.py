@@ -30,7 +30,6 @@ ALLOWED_HOSTS = []
 # Application definition
 AUTH_USER_MODEL = "users.User"
 
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -133,7 +132,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 CORS_ORIGIN_ALLOW_ALL = True
-
 
 
 SIMPLE_JWT = {

@@ -40,8 +40,15 @@ class AnimeListSerializer(serializers.ModelSerializer):
         extra_kwargs = {'genres': {'required': False}}
 
 
+class EpisodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Episode
+        fields = '__all__'
+
+
 class GenreSerializer(serializers.ModelSerializer):
     animes = AnimeSerializer(many=True, read_only=True)
+    mangas = AnimeSerializer(many=True, read_only=True)
 
     class Meta:
         model = Genre
@@ -75,10 +82,46 @@ class UserAnimeViewStatusSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class UserMangaViewStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserMangaViewStatus
+        fields = '__all__'
+        depth = 1
+
+
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = '__all__'
+
+
+class MangaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manga
+        fields = ['id', 'title', 'eng_title', 'description', 'release_date', 'status', 'author', 'artist', 'poster',
+                  'genres', 'avg_rating', 'count_rate']
+        extra_kwargs = {'genres': {'required': False}}
+        depth = 1
+
+
+class MangaListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manga
+        fields = ('id', 'title', 'release_date', 'poster', 'avg_rating', 'count_rate',)
+        extra_kwargs = {'genres': {'required': False}}
+
+
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = '__all__'
+
+
+class ChapterFilesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChapterFiles
+        fields = '__all__'
+        depth = 1
 
 
 class RegisterSerializer(serializers.ModelSerializer):
