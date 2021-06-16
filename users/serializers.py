@@ -14,16 +14,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    """
-    Currently unused in preference of the below.
-    """
+
     email = serializers.EmailField(required=True)
     username = serializers.CharField(required=True)
     password = serializers.CharField(min_length=8, write_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'user_img')
+        fields = ('email', 'username', 'user_img', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

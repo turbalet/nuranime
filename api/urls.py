@@ -28,5 +28,6 @@ urlpatterns = [
     path('manga/detail/<int:pk>', MangaDetailView.as_view()),
     path('manga/chapter/detail/<int:pk>', ChapterDetailView.as_view()),
     path('manga/chapters/<int:manga_id>', ChapterListCreateView.as_view()),
-    path('manga/pages/<int:chapter_id>', ChapterFilesListCreateView.as_view())
+    path('manga/pages/<int:chapter_id>', ChapterFilesListCreateView.as_view()),
+    path('animes/manga/<int:manga_id>', RelatedAnimeListView.as_view())
 ]

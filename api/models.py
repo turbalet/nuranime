@@ -40,28 +40,6 @@ class Genre(models.Model):
         return self.genre_name
 
 
-class Anime(models.Model):
-    title = models.CharField(max_length=64)
-    description = models.TextField()
-    release_date = models.DateField()
-    season = models.CharField(max_length=64)
-    status = models.ForeignKey(Status, on_delete=models.CASCADE)
-    studio = models.ForeignKey(Studio, on_delete=models.CASCADE)
-    poster = models.ImageField(upload_to='posters/', default='NULL')
-    genres = models.ManyToManyField(Genre, related_name='animes', blank=True)
-
-    def __str__(self):
-        return self.title
-
-    def avg_rating(self):
-        return Rating.objects.filter(anime=self).aggregate(
-            avg=Coalesce(models.Avg('stars'), 0),
-        )
-
-    def count_rate(self):
-        return Rating.objects.filter(anime=self).count()
-
-
 class Manga(models.Model):
     title = models.CharField(max_length=64)
     eng_title = models.CharField(max_length=64, default='F')
@@ -83,6 +61,29 @@ class Manga(models.Model):
 
     def count_rate(self):
         return Rating.objects.filter(manga=self).count()
+
+
+class Anime(models.Model):
+    title = models.CharField(max_length=64)
+    description = models.TextField()
+    release_date = models.DateField()
+    season = models.CharField(max_length=64)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE)
+    studio = models.ForeignKey(Studio, on_delete=models.CASCADE)
+    poster = models.ImageField(upload_to='posters/', default='NULL')
+    genres = models.ManyToManyField(Genre, related_name='animes', blank=True)
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, blank=True, default=None)
+
+    def __str__(self):
+        return self.title
+
+    def avg_rating(self):
+        return Rating.objects.filter(anime=self).aggregate(
+            avg=Coalesce(models.Avg('stars'), 0),
+        )
+
+    def count_rate(self):
+        return Rating.objects.filter(anime=self).count()
 
 
 # class User(AbstractUser):
@@ -132,6 +133,7 @@ class Chapter(models.Model):
 class ChapterFiles(models.Model):
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     chapter_images = models.FileField(upload_to=manga_chapter_upload_location)
+    page_no = models.IntegerField()
 
 
 class Rating(models.Model):

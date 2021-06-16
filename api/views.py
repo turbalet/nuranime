@@ -25,7 +25,18 @@ class AnimeCreateView(generics.ListCreateAPIView):
 
 class TopAnimeListView(generics.ListAPIView):
     serializer_class = AnimeListSerializer
-    queryset = Anime.objects.annotate(avg_rate=Avg('rating__stars')).order_by('-avg_rate')[:20]
+    queryset = Anime.objects.annotate(avg_rate=Avg('rating__stars')).order_by('avg_rate')[:20]
+
+
+class RelatedAnimeListView(generics.ListAPIView):
+    serializer_class = AnimeListSerializer
+
+    def get_queryset(self):
+        queryset = Anime.objects.all()
+        manga_id = self.kwargs['manga_id']
+        if manga_id is not None:
+            queryset = queryset.filter(manga__id=manga_id)
+        return queryset
 
 
 class AnimeDetailView(generics.RetrieveUpdateDestroyAPIView):
